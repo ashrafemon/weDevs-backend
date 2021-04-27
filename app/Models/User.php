@@ -27,14 +27,25 @@ class User
         }
     }
 
+    public function findByEmail($email)
+    {
+        $statement = "SELECT * FROM $this->table WHERE email = ?;";
+        try {
+            $statement = $this->conn->prepare($statement);
+            $statement->execute(array($email));
+            return $statement->fetch(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
     public function find($id)
     {
-        $statement = "SELECT * FROM person WHERE id = ?;";
-
+        $statement = "SELECT * FROM $this->table WHERE id = ?;";
         try {
-            $statement = $this->db->prepare($statement);
+            $statement = $this->conn->prepare($statement);
             $statement->execute(array($id));
-            return $statement->fetchAll(\PDO::FETCH_ASSOC);
+            return $statement->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             exit($e->getMessage());
         }
@@ -42,20 +53,13 @@ class User
 
     public function insert(array $input)
     {
-        $statement = "
-            INSERT INTO person 
-                (firstname, lastname, firstparent_id, secondparent_id)
-            VALUES
-                (:firstname, :lastname, :firstparent_id, :secondparent_id);
-        ";
-
+        $statement = "INSERT INTO $this->table (name, email, password) VALUES (:name, :email, :password);";
         try {
-            $statement = $this->db->prepare($statement);
+            $statement = $this->conn->prepare($statement);
             $statement->execute(array(
-                'firstname' => $input['firstname'],
-                'lastname' => $input['lastname'],
-                'firstparent_id' => $input['firstparent_id'] ?? null,
-                'secondparent_id' => $input['secondparent_id'] ?? null,
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => password_hash($input['password'], PASSWORD_BCRYPT)
             ));
             return $statement->rowCount();
         } catch (\PDOException $e) {

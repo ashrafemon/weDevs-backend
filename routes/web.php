@@ -5,7 +5,19 @@ use app\Controllers\Admin\OrderController as AdminOrderController;
 use app\Controllers\Admin\ProductController as AdminProductController;
 use app\Controllers\OrderController;
 use app\Controllers\ProductController;
+use app\Controllers\AuthController;
 use app\Core\Route;
+
+
+/*
+    Auth Routes
+    ----------------------------------------------------------
+    login, register, verify, me
+*/
+Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/verify', [AuthController::class, 'verify']);
+Route::post('/auth/me', [AuthController::class, 'me']);
 
 /*
     Admin Routes
@@ -41,3 +53,4 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products/show', [ProductController::class, 'show']);
 
 Route::post('/orders', [OrderController::class, 'store']);
+
