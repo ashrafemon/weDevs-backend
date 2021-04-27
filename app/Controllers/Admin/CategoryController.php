@@ -28,7 +28,9 @@ class CategoryController
     public static function show()
     {
         $request = Request::formRequest();
+//        print_r($request);
         $category = (new Category())->find($request['id']);
+//        print_r($category);
         return Response::apiResponse(['status' => 'done', 'category' => $category], 200);
     }
 

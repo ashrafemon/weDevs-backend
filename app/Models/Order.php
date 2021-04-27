@@ -31,7 +31,7 @@ class Order
     {
         $statement = "SELECT * FROM $this->table WHERE id = ? LIMIT 1;";
         try {
-            $statement = $this->db->prepare($statement);
+            $statement = $this->conn->prepare($statement);
             $statement->execute(array($id));
             return $statement->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
