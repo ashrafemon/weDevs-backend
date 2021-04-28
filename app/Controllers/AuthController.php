@@ -16,7 +16,7 @@ class AuthController
             return Response::apiResponse(['status' => 'error', 'message' => 'Credentials not matched']);
         }
         $token = Auth::createToken();
-        return Response::apiResponse(['status' => 'done', 'token' => "Bearer $token"], 201);
+        return Response::apiResponse(['status' => 'done', 'message' => 'Login successful', 'token' => "Bearer $token", 'user' => Auth::user()], 201);
     }
 
     public static function verify()

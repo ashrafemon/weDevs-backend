@@ -41,7 +41,7 @@ class Product
 
     public function insert(array $input)
     {
-        $statement = "INSERT INTO $this->table (name, sku, description, category_id, price, image) VALUES (:name, :sku, :description, :category_id, :price, :image);";
+        $statement = "INSERT INTO $this->table (name, sku, description, category_id, category_name, price, image) VALUES (:name, :sku, :description, :category_id, :category_name, :price, :image);";
         try {
             $statement = $this->conn->prepare($statement);
             $statement->execute(array(
@@ -49,6 +49,7 @@ class Product
                 'sku' => $input['sku'],
                 'description' => $input['description'],
                 'category_id' => $input['category_id'],
+                'category_name' => $input['category_name'],
                 'price' => $input['price'],
                 'image' => $input['image'] ?? null,
             ));
@@ -60,7 +61,7 @@ class Product
 
     public function update($id, array $input)
     {
-        $statement = "UPDATE $this->table SET name = :name,description = :description,category_id = :category_id,price = :price, image = :image WHERE id = :id;";
+        $statement = "UPDATE $this->table SET name = :name, description = :description, category_id = :category_id, category_name = :category_name, price = :price, image = :image WHERE id = :id;";
         try {
             $statement = $this->conn->prepare($statement);
             $statement->execute(array(
@@ -68,6 +69,7 @@ class Product
                 'name' => $input['name'],
                 'description' => $input['description'],
                 'category_id' => $input['category_id'],
+                'category_name' => $input['category_name'],
                 'price' => $input['price'],
                 'image' => $input['image'] ?? null,
             ));

@@ -69,24 +69,14 @@ class User
 
     public function update($id, array $input)
     {
-        $statement = "
-            UPDATE person
-            SET 
-                firstname = :firstname,
-                lastname  = :lastname,
-                firstparent_id = :firstparent_id,
-                secondparent_id = :secondparent_id
-            WHERE id = :id;
-        ";
-
+        $statement = "UPDATE person SET name = :name, email  = :email,password = :password WHERE id = :id;";
         try {
-            $statement = $this->db->prepare($statement);
+            $statement = $this->conn->prepare($statement);
             $statement->execute(array(
                 'id' => (int)$id,
-                'firstname' => $input['firstname'],
-                'lastname' => $input['lastname'],
-                'firstparent_id' => $input['firstparent_id'] ?? null,
-                'secondparent_id' => $input['secondparent_id'] ?? null,
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => password_hash($input['password'], PASSWORD_BCRYPT),
             ));
             return $statement->rowCount();
         } catch (\PDOException $e) {
@@ -97,10 +87,9 @@ class User
     public function delete($id)
     {
         $statement = "DELETE FROM $this->table WHERE id = :id;";
-
         try {
-            $statement = $this->db->prepare($statement);
-            $statement->execute(array('id' => $id));
+            $statement = $this->conn->prepare($statement);
+            $statement->execute(array('id' => (int)$id));
             return $statement->rowCount();
         } catch (\PDOException $e) {
             exit($e->getMessage());

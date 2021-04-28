@@ -39,17 +39,21 @@ class Order
         }
     }
 
-    public function insert(array $input)
+    public function insert(array $input, $user)
     {
-        $statement = "INSERT INTO $this->table (user_id, product_id, quantity, price, status) VALUES (:use_id, :product_id, :quantity, :price, :status);";
+        $statement = "INSERT INTO $this->table 
+                                (user_id, user_name, user_email, product_id, product_name, quantity, price) 
+                        VALUES  (:user_id, :user_name, :user_email, :product_id, :product_name, :quantity, :price);";
         try {
             $statement = $this->conn->prepare($statement);
             $statement->execute(array(
-                'user_id' => $input['user_id'],
-                'product_id' => $input['product_id'],
+                'user_id' => (int)$user['id'],
+                'user_name' => $user['name'],
+                'user_email' => $user['email'],
+                'product_id' => (int)$input['product_id'],
+                'product_name' => $input['product_name'],
                 'quantity' => $input['quantity'],
                 'price' => $input['price'],
-                'status' => $input['status'],
             ));
             return $statement->rowCount();
         } catch (\PDOException $e) {
@@ -59,15 +63,16 @@ class Order
 
     public function update($id, array $input)
     {
-        $statement = "UPDATE $this->table SET user_id = :user_id,product_id = :product_id,quantity = :quantity,price = :price, status = :status WHERE id = :id;";
+//        $statement = "UPDATE $this->table SET user_id = :user_id, product_id = :product_id,quantity = :quantity,price = :price, status = :status WHERE id = :id;";
+        $statement = "UPDATE $this->table SET status = :status WHERE id = :id;";
         try {
             $statement = $this->conn->prepare($statement);
             $statement->execute(array(
                 'id' => (int)$id,
-                'user_id' => $input['user_id'],
-                'product_id' => $input['product_id'],
-                'quantity' => $input['quantity'],
-                'price' => $input['price'],
+//                'user_id' => $input['user_id'],
+//                'product_id' => $input['product_id'],
+//                'quantity' => $input['quantity'],
+//                'price' => $input['price'],
                 'status' => $input['status'],
             ));
             return $statement->rowCount();
