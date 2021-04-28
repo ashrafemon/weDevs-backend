@@ -6,13 +6,23 @@ header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,PATCH,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-require_once __DIR__ . '/../routes/web.php';
-
 use app\Core\Application;
+use Cloudinary\Configuration\Configuration;
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
+
+Configuration::instance([
+    'cloud' => [
+        'cloud_name' => $_ENV['CLOUDINARY_CLOUD_NAME'],
+        'api_key' => $_ENV['CLOUDINARY_API_KEY'],
+        'api_secret' => $_ENV['CLOUDINARY_API_SECRET']
+    ],
+    'url' => ['secure' => true]
+]);
+
+require_once __DIR__ . '/../routes/web.php';
 
 $app = new Application();
 $app->run();
