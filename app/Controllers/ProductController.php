@@ -18,7 +18,13 @@ class ProductController
     public static function show()
     {
         $request = Request::formRequest();
+        if (!isset($request['id'])) {
+            return Response::apiResponse(['status' => 'validation_error', 'errors' => 'id is required'], 403);
+        }
         $product = (new Product())->find($request['id']);
+        if (!$product) {
+            return Response::apiResponse(['status' => 'error', 'message' => 'There is no product...'], 404);
+        }
         return Response::apiResponse(['status' => 'done', 'product' => $product], 200);
     }
 }

@@ -11,14 +11,21 @@ class OrderController
 {
     public static function store()
     {
-        $verifyToken = Auth::verifyToken();
-        if (count(Auth::user())) {
-            $request = Request::formRequest();
-            if ((new Order())->insert($request, Auth::user())) {
-                return Response::apiResponse(['status' => 'done', 'message' => 'Order created successfully'], 201);
-            }
-        } else {
-            return Response::apiResponse(['status' => 'error', 'message' => $verifyToken], 200);
+        if (!Auth::verifyToken()) {
+            return Response::apiResponse(['status' => 'error', 'message' => 'Unauthenticated. No verified token found'], 403);
+        }
+        $request = Request::formRequest();
+        if (
+            !isset($request['product_id']) ||
+            !isset($request['product_name']) ||
+            !isset($request['quantity']) ||
+            !isset($request['price']) ||
+            !isset($request['shipping_address'])
+        ) {
+            return Response::apiResponse(['status' => 'validation_error', 'message' => 'product id, product name, quantity, price & shipping address is required'], 403);
+        }
+        if ((new Order())->insert($request, Auth::user())) {
+            return Response::apiResponse(['status' => 'done', 'message' => 'Order placed successfully. Please wait for our customer care contact.'], 201);
         }
     }
 }

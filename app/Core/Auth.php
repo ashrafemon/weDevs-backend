@@ -54,11 +54,11 @@ class Auth
                 $authToken = str_replace('Bearer ', '', $header['Authorization']);
                 $data = (array)JWT::decode($authToken, self::$key, array('HS256'));
                 self::$user = (new User())->findByEmail($data['email']);
-                return 'You are authenticated.';
+                return true;
             } catch (\Exception $e) {
-                return 'Unauthenticated. No verified token found';
+                return false;
             }
         }
-        return 'Unauthenticated. No verified token found';
+        return false;
     }
 }

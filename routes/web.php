@@ -37,6 +37,7 @@ Route::post('/admin/products', [AdminProductController::class, 'store']);
 Route::post('/admin/products/show', [AdminProductController::class, 'show']);
 Route::patch('/admin/products/edit', [AdminProductController::class, 'update']);
 Route::delete('/admin/products/delete', [AdminProductController::class, 'destroy']);
+Route::post('/admin/products/upload_image', [AdminProductController::class, 'upload_image']);
 
 Route::get('/admin/orders', [AdminOrderController::class, 'index']);
 Route::post('/admin/orders/show', [AdminOrderController::class, 'show']);

@@ -59,19 +59,19 @@ class Product
         }
     }
 
-    public function update($id, array $input)
+    public function update($id, array $input, $product)
     {
         $statement = "UPDATE $this->table SET name = :name, description = :description, category_id = :category_id, category_name = :category_name, price = :price, image = :image WHERE id = :id;";
         try {
             $statement = $this->conn->prepare($statement);
             $statement->execute(array(
                 'id' => (int)$id,
-                'name' => $input['name'],
-                'description' => $input['description'],
-                'category_id' => $input['category_id'],
-                'category_name' => $input['category_name'],
-                'price' => $input['price'],
-                'image' => $input['image'] ?? null,
+                'name' => $input['name'] ?? $product['name'],
+                'description' => $input['description'] ?? $product['description'],
+                'category_id' => $input['category_id'] ?? $product['category_id'],
+                'category_name' => $input['category_name'] ?? $product['category_name'],
+                'price' => $input['price'] ?? $product['price'],
+                'image' => $input['image'] ?? $product['image'],
             ));
             return $statement->rowCount();
         } catch (\PDOException $e) {

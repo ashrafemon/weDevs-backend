@@ -34,7 +34,7 @@ class Route
         if ($callback) {
             return call_user_func($callback);
         } else {
-            return "No routes found";
+            return 'No routes found';
         }
     }
 
